@@ -1,0 +1,48 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Elixir and OTP
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: "1.18.x"
+          otp-version: "27.x"
+
+      - name: Verify tag matches manifest version
+        run: |
+          tag_version="${GITHUB_REF_NAME#v}"
+          manifest_version="$(grep -oE '@version "[^"]+"' mix.exs | head -1 | sed -E 's/@version "([^"]+)"/\1/')"
+          echo "Tag version: ${tag_version}"
+          echo "Manifest version: ${manifest_version}"
+          if [ "${tag_version}" != "${manifest_version}" ]; then
+            echo "::error::Tag version ${tag_version} does not match mix.exs @version ${manifest_version}"
+            exit 1
+          fi
+
+      - name: Fetch dependencies
+        run: mix deps.get
+
+      - name: Publish to Hex
+        run: mix hex.publish --yes
+        env:
+          HEX_API_KEY: ${{ secrets.HEX_API_KEY }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
