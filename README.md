@@ -1,6 +1,6 @@
 # Demografix
 
-Official Elixir client for the Demografix APIs. One client predicts gender, age, and nationality across [genderize.io](https://genderize.io), [agify.io](https://agify.io), and [nationalize.io](https://nationalize.io), summarizing a list of names and reporting the quota carried on every response.
+Run demographic analysis over names — predicted gender, age, and nationality — from one Elixir client. The package covers [genderize.io](https://genderize.io), [agify.io](https://agify.io), and [nationalize.io](https://nationalize.io).
 
 ## Install
 
@@ -33,11 +33,10 @@ batch.quota.remaining
 # => 24987
 ```
 
-The client is a struct. `Demografix.new/2` takes an optional API key and options. Without a key, requests use the free per-IP tier. The same key works across all three services and shares one quota.
+The client is a struct. `Demografix.new/2` takes a required API key and options. The same key works across all three services. A `nil` or blank key raises `ArgumentError`.
 
 ```elixir
-Demografix.new()                              # no key
-Demografix.new("YOUR_API_KEY")                # with a key
+Demografix.new("YOUR_API_KEY")
 Demografix.new("YOUR_API_KEY", timeout: 5_000) # custom receive timeout in ms (default 10_000)
 ```
 
@@ -161,7 +160,7 @@ The bang variants raise the same `Demografix.Error`, so `rescue` works against i
 
 | Function | Returns | Notes |
 |---|---|---|
-| `Demografix.new(api_key \\ nil, opts \\ [])` | `t()` | `opts`: `:timeout` (ms) |
+| `Demografix.new(api_key, opts \\ [])` | `t()` | `opts`: `:timeout` (ms) |
 | `genderize(client, name, opts \\ [])` | `{:ok, %Genderize{}}` | `opts`: `:country_id` |
 | `genderize_batch(client, names, opts \\ [])` | `{:ok, %Batch{}}` | `opts`: `:country_id`; max 10 names |
 | `agify(client, name, opts \\ [])` | `{:ok, %Agify{}}` | `opts`: `:country_id` |
@@ -191,4 +190,4 @@ end)
 
 ## Reference
 
-Full API reference: <https://genderize.io/documentation/api>. Create an API key in your account dashboard at [genderize.io](https://genderize.io), [agify.io](https://agify.io), or [nationalize.io](https://nationalize.io). One key works across all three services. The free per-IP tier requires no key.
+Full API reference: <https://genderize.io/documentation/api>. An API key is required. Creating one is free and includes 2,500 requests per month. Generate a key in your dashboard at [genderize.io](https://genderize.io), [agify.io](https://agify.io), or [nationalize.io](https://nationalize.io). One key works across all three services.

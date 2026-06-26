@@ -9,9 +9,10 @@ defmodule Demografix do
 
   ## Construction
 
-      client = Demografix.new()                       # free per-IP tier
-      client = Demografix.new("YOUR_API_KEY")         # with a key
+      client = Demografix.new("YOUR_API_KEY")
       client = Demografix.new("YOUR_API_KEY", timeout: 5_000)
+
+  An `api_key` is required. A `nil` or blank key raises `ArgumentError`.
 
   ## Results and errors
 
@@ -38,14 +39,16 @@ defmodule Demografix do
   @type t :: Client.t()
 
   @doc """
-  Build a client. `api_key` is optional; omit it for the free per-IP tier.
+  Build a client. `api_key` is required; a `nil` or blank key raises
+  `ArgumentError` before any request. The same key works across all three
+  services.
 
   ## Options
 
     * `:timeout` — receive timeout in milliseconds. Defaults to `10_000`.
   """
-  @spec new(String.t() | nil, keyword()) :: t()
-  defdelegate new(api_key \\ nil, opts \\ []), to: Client
+  @spec new(String.t(), keyword()) :: t()
+  defdelegate new(api_key, opts \\ []), to: Client
 
   @doc """
   Predict the gender of one name.

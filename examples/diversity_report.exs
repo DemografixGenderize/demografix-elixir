@@ -4,9 +4,9 @@
 #
 #     mix run examples/diversity_report.exs
 #
-# Set DEMOGRAFIX_API_KEY to use a key; without it the call uses the free per-IP tier.
+# Set DEMOGRAFIX_API_KEY to a key from your dashboard at genderize.io, agify.io, or nationalize.io.
 
-client = Demografix.new(System.get_env("DEMOGRAFIX_API_KEY"))
+client = Demografix.new(System.fetch_env!("DEMOGRAFIX_API_KEY"))
 
 names = ["peter", "lois", "kim", "michael", "nguyen"]
 

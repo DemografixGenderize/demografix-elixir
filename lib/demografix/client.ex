@@ -38,16 +38,27 @@ defmodule Demografix.Client do
 
   @default_timeout 10_000
 
-  @enforce_keys [:timeout]
-  defstruct [:timeout, api_key: nil]
+  @enforce_keys [:timeout, :api_key]
+  defstruct [:timeout, :api_key]
 
-  @type t :: %__MODULE__{api_key: String.t() | nil, timeout: pos_integer()}
+  @type t :: %__MODULE__{api_key: String.t(), timeout: pos_integer()}
 
   @doc false
-  @spec new(String.t() | nil, keyword()) :: t()
-  def new(api_key \\ nil, opts \\ []) do
+  @spec new(String.t(), keyword()) :: t()
+  def new(api_key, opts \\ []) do
+    validate_api_key(api_key)
     timeout = Keyword.get(opts, :timeout, @default_timeout)
     %__MODULE__{api_key: api_key, timeout: timeout}
+  end
+
+  defp validate_api_key(api_key) when is_binary(api_key) do
+    if String.trim(api_key) == "" do
+      raise ArgumentError, "api_key is required"
+    end
+  end
+
+  defp validate_api_key(_api_key) do
+    raise ArgumentError, "api_key is required"
   end
 
   @doc false
@@ -123,7 +134,6 @@ defmodule Demografix.Client do
 
   defp country_param(_service, _opts), do: []
 
-  defp apikey_param(%__MODULE__{api_key: nil}), do: []
   defp apikey_param(%__MODULE__{api_key: api_key}), do: [{"apikey", api_key}]
 
   # --- HTTP ---

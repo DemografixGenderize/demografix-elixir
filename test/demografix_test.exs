@@ -19,7 +19,7 @@ defmodule DemografixTest do
   ]
 
   setup do
-    {:ok, client: Demografix.new()}
+    {:ok, client: Demografix.new("test-key")}
   end
 
   # Stub the transport with a fixed status, the rate-limit headers, and a body.
@@ -122,7 +122,7 @@ defmodule DemografixTest do
     assert :binary.match(decoded_query, "name[]=michael") <
              :binary.match(decoded_query, "name[]=matthew")
 
-    refute query =~ "apikey"
+    assert URI.decode_query(query)["apikey"] == "test-key"
   end
 
   # --- 3. null prediction returns null/empty without error ---
@@ -226,6 +226,16 @@ defmodule DemografixTest do
     assert {:ok, _} = Demografix.genderize(client, "peter")
     assert_receive {:request, _host, query, _ua}
     assert URI.decode_query(query)["apikey"] == "secret-key"
+  end
+
+  test "constructing without a valid api key raises with no request" do
+    Req.Test.stub(Demografix, fn _conn ->
+      flunk("no HTTP request must be made when the client is constructed without a key")
+    end)
+
+    assert_raise ArgumentError, "api_key is required", fn -> Demografix.new(nil) end
+    assert_raise ArgumentError, "api_key is required", fn -> Demografix.new("") end
+    assert_raise ArgumentError, "api_key is required", fn -> Demografix.new("   ") end
   end
 
   test "the bang variant returns the result on success", %{client: client} do
