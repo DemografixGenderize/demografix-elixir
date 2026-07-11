@@ -7,6 +7,7 @@ defmodule DemografixTest do
     Batch,
     Error,
     Genderize,
+    GenderizePrediction,
     Nationalize,
     NationalizeCountry,
     Quota
@@ -215,6 +216,25 @@ defmodule DemografixTest do
              Demografix.genderize(client, "peter")
 
     assert %Quota{limit: 25000, remaining: 24987, reset: 1_314_000} = error.quota
+  end
+
+  # --- 8. a one-name batch still sends name[] and parses a one-element array ---
+
+  test "a batch of one name sends name[] and parses a one-element array", %{client: client} do
+    capture_request(200, ~s([{"count": 1352696, "name": "peter", "gender": "male", "probability": 1.0}]))
+
+    assert {:ok, %Batch{results: results, quota: quota}} =
+             Demografix.genderize_batch(client, ["peter"])
+
+    assert [%GenderizePrediction{name: "peter", gender: "male", probability: 1.0, count: 1_352_696}] =
+             results
+
+    assert %Quota{limit: 25000, remaining: 24987, reset: 1_314_000} = quota
+
+    assert_receive {:request, "api.genderize.io", query, _ua}
+    assert URI.decode(query) =~ "name[]=peter"
+    # The batch form keys on the call, not the name count: never a bare name= parameter.
+    refute Map.has_key?(URI.decode_query(query), "name")
   end
 
   # --- extras: apikey, bang success, transport ---
