@@ -11,7 +11,7 @@ defmodule Demografix.Error do
   |--------------------|--------|---------------------------------------------------------------|
   | `:auth`            | 401    | Invalid API key.                                              |
   | `:subscription`    | 402    | Freebie expired or subscription is not active.                |
-  | `:validation`      | 422    | Invalid parameters; also raised client-side for >10 names.    |
+  | `:validation`      | 422    | Invalid parameters; also raised client-side for >100 names.   |
   | `:rate_limit`      | 429    | Request limit reached. `:quota` is always populated.          |
   | `:transport`       | nil    | Network failure, timeout, or a non-JSON body.                 |
   | `:demografix`      | other  | Any other non-2xx response.                                   |

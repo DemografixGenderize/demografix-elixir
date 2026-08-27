@@ -1,7 +1,7 @@
 defmodule Demografix.MixProject do
   use Mix.Project
 
-  @version "0.1.0"
+  @version "0.2.0"
   @source_url "https://github.com/DemografixGenderize/demografix-elixir"
 
   def project do
@@ -35,7 +35,10 @@ defmodule Demografix.MixProject do
   end
 
   defp description do
-    "Official Elixir client for the Demografix APIs: genderize, agify, and nationalize."
+    "Predict gender, age, and nationality from first names. Official Elixir client for the " <>
+      "genderize.io, agify.io, and nationalize.io APIs: look up one name or batch up to 100 " <>
+      "names per request for bulk demographic analysis, optionally scoped to a country, " <>
+      "with quota on every response."
   end
 
   defp package do

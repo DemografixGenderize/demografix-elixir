@@ -114,7 +114,7 @@ defmodule DemografixTest do
 
     assert {:ok, %Batch{}} = Demografix.agify_batch(client, ["michael", "matthew"])
 
-    assert_receive {:request, "api.agify.io", query, ["demografix-elixir/0.1.0"]}
+    assert_receive {:request, "api.agify.io", query, ["demografix-elixir/0.2.0"]}
     # name[] is percent-encoded to name%5B%5D and repeated once per name in order.
     decoded_query = URI.decode(query)
     assert decoded_query =~ "name[]=michael"
@@ -163,25 +163,25 @@ defmodule DemografixTest do
     assert URI.decode_query(query)["name"] == "kim"
   end
 
-  # --- 5. batch of 11 names raises ValidationError with no HTTP call ---
+  # --- 5. batch of 101 names raises ValidationError with no HTTP call ---
 
-  test "a batch of 11 names is rejected client-side with no request", %{client: client} do
+  test "a batch of 101 names is rejected client-side with no request", %{client: client} do
     Req.Test.stub(Demografix, fn _conn ->
       flunk("no HTTP request must be made for an oversized batch")
     end)
 
-    names = Enum.map(1..11, &"name#{&1}")
+    names = Enum.map(1..101, &"name#{&1}")
 
     assert {:error, %Error{kind: :validation, status: nil}} =
              Demografix.genderize_batch(client, names)
   end
 
-  test "the bang batch variant raises for 11 names with no request", %{client: client} do
+  test "the bang batch variant raises for 101 names with no request", %{client: client} do
     Req.Test.stub(Demografix, fn _conn ->
       flunk("no HTTP request must be made for an oversized batch")
     end)
 
-    names = Enum.map(1..11, &"name#{&1}")
+    names = Enum.map(1..101, &"name#{&1}")
 
     assert_raise Error, fn -> Demografix.genderize_batch!(client, names) end
   end

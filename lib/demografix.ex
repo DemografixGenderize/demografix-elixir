@@ -62,9 +62,9 @@ defmodule Demografix do
   defdelegate genderize(client, name, opts \\ []), to: Client
 
   @doc """
-  Predict the gender of up to 10 names.
+  Predict the gender of up to 100 names.
 
-  More than 10 names raises a client-side `Demografix.Error` of kind `:validation`
+  More than 100 names raises a client-side `Demografix.Error` of kind `:validation`
   before any request. Accepts the same `:country_id` option as `genderize/3`.
   """
   @spec genderize_batch(t(), [String.t()], keyword()) :: {:ok, Batch.t()} | {:error, Error.t()}
@@ -78,7 +78,7 @@ defmodule Demografix do
   defdelegate agify(client, name, opts \\ []), to: Client
 
   @doc """
-  Predict the age of up to 10 names. More than 10 names raises a client-side
+  Predict the age of up to 100 names. More than 100 names raises a client-side
   validation error before any request.
   """
   @spec agify_batch(t(), [String.t()], keyword()) :: {:ok, Batch.t()} | {:error, Error.t()}
@@ -91,7 +91,7 @@ defmodule Demografix do
   defdelegate nationalize(client, name, opts \\ []), to: Client
 
   @doc """
-  Predict the nationality of up to 10 names. More than 10 names raises a
+  Predict the nationality of up to 100 names. More than 100 names raises a
   client-side validation error before any request.
   """
   @spec nationalize_batch(t(), [String.t()], keyword()) :: {:ok, Batch.t()} | {:error, Error.t()}

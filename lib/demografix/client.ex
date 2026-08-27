@@ -28,7 +28,7 @@ defmodule Demografix.Client do
 
   @version Mix.Project.config()[:version] || "0.1.0"
   @user_agent "demografix-elixir/#{@version}"
-  @max_batch 10
+  @max_batch 100
 
   @hosts %{
     genderize: "https://api.genderize.io",
