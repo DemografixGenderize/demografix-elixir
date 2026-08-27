@@ -1,6 +1,6 @@
 # Demografix
 
-Predict gender, age, and nationality from first names. One Elixir client covers all three Demografix
+Predict gender, age, and nationality from names. One Elixir client covers all three Demografix
 APIs — [genderize.io](https://genderize.io) (gender), [agify.io](https://agify.io) (age), and
 [nationalize.io](https://nationalize.io) (nationality) — with single-name lookups and batches of up
 to 100 names per request.
@@ -53,7 +53,7 @@ Every function returns `{:ok, result}` or `{:error, %Demografix.Error{}}`. The b
 
 ## genderize
 
-Predict gender. A single call returns one result; the batch call summarizes a list.
+Predict gender from names. A single call returns one result; the batch call summarizes a list.
 
 ```elixir
 {:ok, result} = Demografix.genderize(client, "peter")
@@ -71,7 +71,7 @@ Enum.frequencies_by(batch.results, & &1.gender)
 
 ## agify
 
-Predict age. Aggregate the batch into an age distribution.
+Predict age from names. Aggregate the batch into an age distribution.
 
 ```elixir
 {:ok, result} = Demografix.agify(client, "michael")
@@ -88,7 +88,7 @@ Enum.sum(ages) / length(ages)
 
 ## nationalize
 
-Predict nationality. Each prediction holds up to five country candidates in descending probability.
+Predict nationality from names. Each prediction holds up to five country candidates in descending probability.
 Aggregate the batch into a nationality mix.
 
 ```elixir

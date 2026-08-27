@@ -35,7 +35,7 @@ defmodule Demografix.MixProject do
   end
 
   defp description do
-    "Predict gender, age, and nationality from first names. Official Elixir client for the " <>
+    "Predict gender, age, and nationality from names. Official Elixir client for the " <>
       "genderize.io, agify.io, and nationalize.io APIs: look up one name or batch up to 100 " <>
       "names per request for bulk demographic analysis, optionally scoped to a country, " <>
       "with quota on every response."
