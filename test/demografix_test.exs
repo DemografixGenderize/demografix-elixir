@@ -114,7 +114,7 @@ defmodule DemografixTest do
 
     assert {:ok, %Batch{}} = Demografix.agify_batch(client, ["michael", "matthew"])
 
-    assert_receive {:request, "api.agify.io", query, ["demografix-elixir/0.2.1"]}
+    assert_receive {:request, "api.agify.io", query, ["demografix-elixir/0.2.2"]}
     # name[] is percent-encoded to name%5B%5D and repeated once per name in order.
     decoded_query = URI.decode(query)
     assert decoded_query =~ "name[]=michael"
